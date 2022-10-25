@@ -6,6 +6,9 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const PORT = 8080;
 const User = require("./src/Routes/user")
+const EurPln = require("./src/Routes/user");
+const eurPLN = require("./src/Routes/eurpln");
+
 dotenv.config();
 const connectionParams = {
   useNewUrlParser: true,
@@ -20,14 +23,22 @@ db.once("open", function () {
   console.log("Connected successfully");
 });
 app.use(bodyParser.json());
+
+
+
+
 app.use(cors());
 app.use(User);
+app.use(EurPln);
 app.get("/", (req, res)=>{
-    res.send("Działasz?");
+    res.send("hello world");
 })
+eurPLN();
+
+console.log(process.env.JWTKEY);
 app.use(bodyParser.json());
 app.listen(PORT, function() {
   connect();
     console.log("Server is running on Port");
-    console.log(process.env.JWTKEY);
+    
 });
