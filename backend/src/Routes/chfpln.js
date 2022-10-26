@@ -1,11 +1,11 @@
-const EurPlnModel = require("../Models/eurpln")
+const ChfPlnModel = require("../Models/chfpln")
 const axios = require('axios');
-const eurPLN = ()=> {
+const chfPLN = ()=> {
   const options = {
     method: 'GET',
     url: 'https://alpha-vantage.p.rapidapi.com/query',
     params: {
-      from_symbol: 'EUR',
+      from_symbol: 'CHF',
       function: 'FX_DAILY',
       to_symbol: 'PLN',
       outputsize: 'full',
@@ -20,14 +20,15 @@ const eurPLN = ()=> {
   axios.request(options).then(function (response) {
     for(let time in response.data["Time Series FX (Daily)"]){
      try{
-         new EurPlnModel({
+         new ChfPlnModel({
           date: time,
           open: response.data["Time Series FX (Daily)"][time]["1. open"],
           high: response.data["Time Series FX (Daily)"][time]["2. high"],
           low: response.data["Time Series FX (Daily)"][time]["3. low"],
           close: response.data["Time Series FX (Daily)"][time]["4. close"]
          }).save();
-    }catch(error){
+    }
+     catch(error){
       error.message;
      }}
   }).catch(function (error) {
@@ -35,4 +36,4 @@ const eurPLN = ()=> {
   });
 }
 
-module.exports = eurPLN;
+module.exports = chfPLN;

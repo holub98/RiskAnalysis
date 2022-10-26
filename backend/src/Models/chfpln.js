@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const eurplnSchema = new mongoose.Schema({
+const chfplnSchema = new mongoose.Schema({
     date: {
         type: Date,
         unique: true,
@@ -24,6 +24,6 @@ const eurplnSchema = new mongoose.Schema({
     
 })
 
-const EURPLN = mongoose.model("EURPLN", eurplnSchema);
+const CHFPLN = mongoose.model("CHFPLN", chfplnSchema);
 
-module.exports = EURPLN ;
+module.exports = CHFPLN ;

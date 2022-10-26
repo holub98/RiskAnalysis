@@ -6,9 +6,12 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const PORT = 8080;
 const User = require("./src/Routes/user")
-const EurPln = require("./src/Routes/user");
-const eurPLN = require("./src/Routes/eurpln");
+// const usdPLN = require("./src/Routes/usdpln");
+// const gbpPLN = require("./src/Routes/gbppln");
+// const eurPLN = require("./src/Routes/chfpln");
+const chfPLN = require("./src/Routes/eurpln");
 
+const axios = require('axios');
 dotenv.config();
 const connectionParams = {
   useNewUrlParser: true,
@@ -29,11 +32,15 @@ app.use(bodyParser.json());
 
 app.use(cors());
 app.use(User);
-app.use(EurPln);
 app.get("/", (req, res)=>{
     res.send("hello world");
 })
-eurPLN();
+
+
+// usdPLN();
+// gbpPLN();
+chfPLN();
+// eurPLN();
 
 console.log(process.env.JWTKEY);
 app.use(bodyParser.json());
