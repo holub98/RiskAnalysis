@@ -5,13 +5,16 @@ const app = express();
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const PORT = 8080;
-const User = require("./src/Routes/user")
-// const usdPLN = require("./src/Routes/usdpln");
-// const gbpPLN = require("./src/Routes/gbppln");
-// const eurPLN = require("./src/Routes/chfpln");
-const chfPLN = require("./src/Routes/eurpln");
+const User = require("./src/Controllers/user")
+const usdPLN = require("./src/Controllers/USD/saveToDbUsdpln");
+const gbpPLN = require("./src/Controllers/GBP/saveToDbGbppln");
+const chfPLN = require("./src/Controllers/CHF/saveToDbChfpln");
+const eurPLN = require("./src/Controllers/EUR/saveToDbEurpln");
+const euro = require("./src/Controllers/EUR/euro")
+const chf = require("./src/Controllers/CHF/chf")
+const usd = require("./src/Controllers/USD/usd")
+const gbp = require("./src/Controllers/GBP/gbp")
 
-const axios = require('axios');
 dotenv.config();
 const connectionParams = {
   useNewUrlParser: true,
@@ -32,15 +35,19 @@ app.use(bodyParser.json());
 
 app.use(cors());
 app.use(User);
+app.use(euro);
+app.use(chf);
+app.use(usd);
+app.use(gbp);
 app.get("/", (req, res)=>{
     res.send("hello world");
 })
 
 
-// usdPLN();
-// gbpPLN();
+usdPLN();
+gbpPLN();
 chfPLN();
-// eurPLN();
+eurPLN();
 
 console.log(process.env.JWTKEY);
 app.use(bodyParser.json());
