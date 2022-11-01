@@ -4,7 +4,7 @@ const app = express();
 
 app.get('/api/chf', async(req,res) =>{
     try{
-     await ChfPlnModel.find().sort('-date').then((result) =>{
+     await ChfPlnModel.find().sort('date').then((result) =>{
       res.send(result)
       
      }).catch(err =>{

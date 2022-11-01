@@ -4,7 +4,7 @@ const app = express();
 app.get('/api/euro', async(req,res) =>{
 
     try{
-     await EurPlnModel.find().sort('-date').then((result) =>{
+     await EurPlnModel.find().sort('date').then((result) =>{
       res.send(result)
       
      }).catch(err =>{

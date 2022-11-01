@@ -38,7 +38,7 @@ const now = moment(today).format('YYYY-MM-DD');
   }
 })
 
-EurPlnModel.find().sort('-date').then((result) =>{
+EurPlnModel.find().sort('date').then((result) =>{
   let closeValue = result.map(a => a.close);
   let dateValue = result.map(a => new Date(a.date))
   for(let i = 0; i< closeValue.length; i++){

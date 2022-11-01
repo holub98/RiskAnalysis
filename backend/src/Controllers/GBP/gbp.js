@@ -4,7 +4,7 @@ const app = express();
 
 app.get('/api/gbp', async(req,res) =>{
     try{
-     await GbpPlnModel.find().sort('-date').then((result) =>{
+     await GbpPlnModel.find().sort('date').then((result) =>{
       res.send(result)
       
      }).catch(err =>{

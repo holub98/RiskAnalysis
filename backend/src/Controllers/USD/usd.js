@@ -4,7 +4,7 @@ const app = express();
 
 app.get('/api/usd', async(req,res) =>{
     try{
-     await UsdPlnModel.find().sort('-date').then((result) =>{
+     await UsdPlnModel.find().sort('date').then((result) =>{
       res.send(result)
       
      }).catch(err =>{
