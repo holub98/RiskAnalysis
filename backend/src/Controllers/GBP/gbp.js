@@ -1,5 +1,5 @@
 const express = require("express");
-const GbpPlnModel = require("../../Models/gbppln")
+const GbpPlnModel = require("../../Models/GBP/gbppln")
 const app = express();
 
 app.get('/api/gbp', async(req,res) =>{

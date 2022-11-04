@@ -14,6 +14,16 @@ const euro = require("./src/Controllers/EUR/euro")
 const chf = require("./src/Controllers/CHF/chf")
 const usd = require("./src/Controllers/USD/usd")
 const gbp = require("./src/Controllers/GBP/gbp")
+const jpy = require("./src/Controllers/JPY/jpy")
+const SD = require("./src/Controllers/standardDeviation");
+const rrVaR = require("./src/Controllers/relativeReturnVaR");
+const VaR = require("./src/Controllers/VaR");
+const rorUSD = require("./src/Controllers/USD/saveRoRUsd");
+const rorGBP = require("./src/Controllers/GBP/saveRorGpb");
+const rorCHF = require("./src/Controllers/CHF/saveRORChf");
+const rorEUR = require("./src/Controllers/EUR/saveRoREur");
+const jpyPLN = require("./src/Controllers/JPY/saveToDbJpypln");
+const rorJPY = require("./src/Controllers/JPY/saveRoRJpy");
 
 dotenv.config();
 const connectionParams = {
@@ -39,15 +49,24 @@ app.use(euro);
 app.use(chf);
 app.use(usd);
 app.use(gbp);
+app.use(jpy)
+app.use(SD);
+app.use(rrVaR)
+app.use(VaR)
 app.get("/", (req, res)=>{
     res.send("hello world");
 })
 
-
+jpyPLN();
 usdPLN();
 gbpPLN();
 chfPLN();
 eurPLN();
+rorJPY();
+rorUSD();
+rorGBP();
+rorCHF();
+rorEUR();
 
 console.log(process.env.JWTKEY);
 app.use(bodyParser.json());

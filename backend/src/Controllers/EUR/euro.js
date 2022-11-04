@@ -1,5 +1,5 @@
 const express = require("express");
-const EurPlnModel = require("../../Models/eurpln")
+const EurPlnModel = require("../../Models/EUR/eurpln")
 const app = express();
 app.get('/api/euro', async(req,res) =>{
 

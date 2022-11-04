@@ -1,7 +1,7 @@
-const UsdPlnModel = require("../../Models/usdpln")
-const RoRUsd = require('../../Models/rorUsd')
+const UsdPlnModel = require("../../Models/USD/usdpln")
 const request = require('request');
 const moment = require('moment');
+
 const usdPLN = ()=> {
   var url = 'https://www.alphavantage.co/query?function=FX_DAILY&from_symbol=USD&to_symbol=PLN&outputsize=full&apikey=4AOCSQKH2KXMMI46';
   const today = Date.now();
@@ -27,7 +27,7 @@ const usdPLN = ()=> {
           close: data["Time Series FX (Daily)"][time]["4. close"]
          }).save().catch(err => {    
           if (err.name === 'MongoServerError' && err.code === 11000) {
-              console.log("duplicate date")
+              console.log("Istnieje taki kurs dolara")
           }});
         }
     }catch(error){
@@ -36,25 +36,7 @@ const usdPLN = ()=> {
   }
 })
 
-UsdPlnModel.find().sort('-date').then((result) =>{
-  let closeValue = result.map(a => a.close);
-  let dateValue = result.map(a => new Date(a.date))
-  for(let i = 0; i< closeValue.length; i++){
-    try{
-      new RoRUsd({
-        date: dateValue[i],
-        rateOfReturn : Math.log(closeValue[i]/closeValue[i+1])
-      }).save().catch(err => {    
-        if (err.name === 'MongoServerError' && err.code === 11000) {
-            console.log("duplicate date")
-        }});;
-  }catch(error){
-    error.message;
-   }
-    }
- }).catch(err =>{
-  console.log(err);
- });
+
 }
 
 module.exports = usdPLN;

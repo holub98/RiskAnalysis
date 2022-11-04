@@ -1,5 +1,5 @@
 const express = require("express");
-const ChfPlnModel = require("../../Models/chfpln")
+const ChfPlnModel = require("../../Models/CHF/chfpln")
 const app = express();
 
 app.get('/api/chf', async(req,res) =>{

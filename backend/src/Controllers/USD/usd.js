@@ -1,5 +1,5 @@
 const express = require("express");
-const UsdPlnModel = require("../../Models/usdpln")
+const UsdPlnModel = require("../../Models/USD/usdpln")
 const app = express();
 
 app.get('/api/usd', async(req,res) =>{

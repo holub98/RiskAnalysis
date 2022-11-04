@@ -1,6 +1,4 @@
-const express = require("express");
-const EurPlnModel = require("../../Models/eurpln")
-const RoREuro = require('../../Models/rorEuro')
+const EurPlnModel = require("../../Models/EUR/eurpln")
 const request = require('request');
 const moment = require('moment');
 const eurPLN = ()=> {
@@ -29,7 +27,7 @@ const now = moment(today).format('YYYY-MM-DD');
           close: data["Time Series FX (Daily)"][time]["4. close"]
          }).save().catch(err => {    
           if (err.name === 'MongoServerError' && err.code === 11000) {
-              console.log("duplicate date")
+            console.log("Istnieje taki kurs euro")
           }});
         }
     }catch(error){
@@ -38,25 +36,7 @@ const now = moment(today).format('YYYY-MM-DD');
   }
 })
 
-EurPlnModel.find().sort('date').then((result) =>{
-  let closeValue = result.map(a => a.close);
-  let dateValue = result.map(a => new Date(a.date))
-  for(let i = 0; i< closeValue.length; i++){
-    try{
-      new RoREuro({
-        date: dateValue[i],
-        rateOfReturn : Math.log(closeValue[i]/closeValue[i+1])
-      }).save().catch(err => {    
-        if (err.name === 'MongoServerError' && err.code === 11000) {
-            console.log("duplicate date")
-        }});;
-  }catch(error){
-    error.message;
-   }
-    }
- }).catch(err =>{
-  console.log(err);
- });
+
 }
 
 module.exports = eurPLN;
