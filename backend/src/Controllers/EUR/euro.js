@@ -1,20 +1,20 @@
 const express = require("express");
-const EurPlnModel = require("../../Models/EUR/eurpln")
+const currencyModel = require("../../Models/currency");
 const app = express();
-app.get('/api/euro', async(req,res) =>{
+app.get("/api/euro", async (req, res) => {
+  try {
+    await currencyModel
+      .find({ currency: "EUR" })
+      .sort("date")
+      .then((result) => {
+        res.send(result);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
 
-    try{
-     await EurPlnModel.find().sort('date').then((result) =>{
-      res.send(result)
-      
-     }).catch(err =>{
-      console.log(err);
-     });
-      
-  
-    }catch (error) {
-      res.status(500).send(error);
-    }
-  })
-
-  module.exports = app; 
+module.exports = app;

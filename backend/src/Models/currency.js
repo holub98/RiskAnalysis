@@ -1,8 +1,8 @@
 const mongoose = require("mongoose");
-const chfplnSchema = new mongoose.Schema({
+const currencySchema = mongoose.Schema({
     date: {
         type: Date,
-        unique: true,
+        require: true,
         
     },
     open: {
@@ -20,10 +20,13 @@ const chfplnSchema = new mongoose.Schema({
     close: {
         type: Number,
         required: true,
+    },
+    currency: {
+        type: String,
+        require: true
     }
-    
 })
 
-const CHFPLN = mongoose.model("CHFPLN", chfplnSchema);
+const currency = mongoose.model("currency", currencySchema);
 
-module.exports = CHFPLN ;
+module.exports = currency;
