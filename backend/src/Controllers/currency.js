@@ -1,14 +1,12 @@
-const currencyModel = require("../../Models/currency");
-const RoRModel = require("../../Models/dLRoR");
-const express = require("express");
-const app = express();
+const currencyModel = require("../Models/currency");
+const RoRModel = require("../Models/dLRoR");
 const request = require("request");
 const moment = require("moment");
 
-app.post("/api/saveChf", async (req, res) => {
+exports.createCurrency = async (req, res) => {
+  const currency = req.query.currency;
   try {
-    var url =
-      "https://www.alphavantage.co/query?function=FX_DAILY&from_symbol=CHF&to_symbol=PLN&outputsize=full&apikey=4AOCSQKH2KXMMI46";
+    var url = `https://www.alphavantage.co/query?function=FX_DAILY&from_symbol=${currency}&to_symbol=PLN&outputsize=full&apikey=4AOCSQKH2KXMMI46`;
 
     const today = Date.now();
     const now = moment(today).format("YYYY-MM-DD");
@@ -28,7 +26,7 @@ app.post("/api/saveChf", async (req, res) => {
             try {
               const exist = await currencyModel.find({
                 date: time,
-                currency: "CHF",
+                currency: currency,
               });
               if (now !== time) {
                 if (exist.length == 0) {
@@ -38,7 +36,7 @@ app.post("/api/saveChf", async (req, res) => {
                     high: data["Time Series FX (Daily)"][time]["2. high"],
                     low: data["Time Series FX (Daily)"][time]["3. low"],
                     close: data["Time Series FX (Daily)"][time]["4. close"],
-                    currency: "CHF",
+                    currency: currency,
                   }).save();
                 } else {
                   break;
@@ -48,9 +46,8 @@ app.post("/api/saveChf", async (req, res) => {
               error.message;
             }
           }
-          console.log("Add CHF/PLN");
           currencyModel
-            .find({ currency: "CHF" })
+            .find({ currency: "USD" })
             .sort("-date")
             .then(async (result) => {
               let closeValue = result.map((a) => a.close);
@@ -59,13 +56,13 @@ app.post("/api/saveChf", async (req, res) => {
                 try {
                   const existRoR = await RoRModel.find({
                     date: dateValue[i],
-                    currency: "CHF",
+                    currency: currency,
                   });
                   if (existRoR.length == 0) {
                     new RoRModel({
                       date: dateValue[i],
                       rateOfReturn: Math.log(closeValue[i] / closeValue[i + 1]),
-                      currency: "CHF",
+                      currency: currency,
                     }).save();
                   } else {
                     break;
@@ -75,16 +72,29 @@ app.post("/api/saveChf", async (req, res) => {
                 }
               }
             });
-          console.log("Add ror CHF/PLN");
         }
       }
     );
-    currencyModel.find({ currency: "CHF" }).then(async (result) => {
-      res.send("Dodano poprawnie CHF");
-    });
+
+    res.send(`Add correctly ${currency}/PLN`);
   } catch (error) {
     res.status(500).send(error);
   }
-});
+};
 
-module.exports = app;
+exports.getCurrency = async (req, res) => {
+  const currency = req.query.currency;
+  try {
+    await currencyModel
+      .find({ currency: currency })
+      .sort("date")
+      .then((result) => {
+        res.send(result);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  } catch (error) {
+    res.status(500).send(error);
+  }
+};

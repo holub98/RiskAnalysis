@@ -1,10 +1,8 @@
-const express = require("express");
-const app = express();
 const rrVaRModel = require("../Models/relativeReturnVar");
 const RoRModel = require("../Models/dLRoR");
 const statistic = require("simple-statistics");
 
-app.post("/api/relative-returnVaR", async (req, res, next) => {
+exports.createRRVaR = async (req, res, next) => {
   try {
     const startDate = req.query.startDate;
     const endDate = req.query.endDate;
@@ -18,18 +16,7 @@ app.post("/api/relative-returnVaR", async (req, res, next) => {
         confidenceLevel: confidenceLevel,
       });
       if (rrVaRExist.length !== 0) {
-        rrVaRModel
-          .find({
-            startDate: startDate,
-            endDate: endDate,
-            confidenceLevel: confidenceLevel,
-          })
-          .then((result) => {
-            res.send(result);
-          })
-          .catch((err) => {
-            console.log(err);
-          });
+        res.send("These relative return Value at Risk has existed already");
       } else {
         if (confidenceLevel == "0.05") {
           await RoRModel.find({
@@ -132,19 +119,6 @@ app.post("/api/relative-returnVaR", async (req, res, next) => {
                 value: statistic.standardDeviation(jpyValue) * criticalValue95,
                 currency: "JPY",
               }).save();
-            })
-            .catch((err) => {
-              console.log(err);
-            });
-
-          rrVaRModel
-            .find({
-              startDate: startDate,
-              endDate: endDate,
-              confidenceLevel: confidenceLevel,
-            })
-            .then((result) => {
-              res.send(result);
             })
             .catch((err) => {
               console.log(err);
@@ -255,19 +229,6 @@ app.post("/api/relative-returnVaR", async (req, res, next) => {
             .catch((err) => {
               console.log(err);
             });
-
-          rrVaRModel
-            .find({
-              startDate: startDate,
-              endDate: endDate,
-              confidenceLevel: confidenceLevel,
-            })
-            .then((result) => {
-              res.send(result);
-            })
-            .catch((err) => {
-              console.log(err);
-            });
         }
       }
     } catch (error) {
@@ -276,6 +237,26 @@ app.post("/api/relative-returnVaR", async (req, res, next) => {
   } catch (error) {
     res.status(500).send(error);
   }
-});
+};
 
-module.exports = app;
+exports.getRRVaR = async (req, res, next) => {
+  const startDate = req.query.startDate;
+  const endDate = req.query.endDate;
+  const confidenceLevel = req.query.confidenceLevel;
+  try {
+    await rrVaRModel
+      .find({
+        startDate: startDate,
+        endDate: endDate,
+        confidenceLevel: confidenceLevel,
+      })
+      .then((result) => {
+        res.send(result);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  } catch (error) {
+    res.status(500).send(error);
+  }
+};

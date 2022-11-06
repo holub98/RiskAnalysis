@@ -1,10 +1,8 @@
-const express = require("express");
-const app = express();
 const SDModel = require("../Models/standardDeviation");
 const RoRModel = require("../Models/dLRoR");
 const statistic = require("simple-statistics");
 
-app.post("/api/standard-deviation", async (req, res, next) => {
+exports.createSD = async (req, res, next) => {
   try {
     const startDate = req.query.startDate;
     const endDate = req.query.endDate;
@@ -15,20 +13,7 @@ app.post("/api/standard-deviation", async (req, res, next) => {
         endDate: endDate,
         currency: currency,
       });
-
-      if (SDExist.length !== 0) {
-        SDModel.find({
-          startDate: startDate,
-          endDate: endDate,
-          currency: currency,
-        })
-          .then((result) => {
-            res.send(result);
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-      } else {
+      if (SDExist.length == 0) {
         await RoRModel.find({
           date: {
             $gte: startDate,
@@ -44,21 +29,13 @@ app.post("/api/standard-deviation", async (req, res, next) => {
               value: statistic.standardDeviation(value),
               currency: currency,
             }).save();
+            res.send("Added correctly");
           })
           .catch((err) => {
             console.log(err);
           });
-        SDModel.find({
-          startDate: startDate,
-          endDate: endDate,
-          currency: currency,
-        })
-          .then((result) => {
-            res.send(result);
-          })
-          .catch((err) => {
-            console.log(err);
-          });
+      } else {
+        res.send("This standard deviation has existed already");
       }
     } catch (error) {
       error.message;
@@ -66,6 +43,25 @@ app.post("/api/standard-deviation", async (req, res, next) => {
   } catch (error) {
     res.status(500).send(error);
   }
-});
+};
 
-module.exports = app;
+exports.getSD = async (req, res, next) => {
+  try {
+    const startDate = req.query.startDate;
+    const endDate = req.query.endDate;
+    const currency = req.query.currency;
+    await SDModel.find({
+      startDate: startDate,
+      endDate: endDate,
+      currency: currency,
+    })
+      .then((result) => {
+        res.send(result);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  } catch (error) {
+    res.status(500).send(error);
+  }
+};

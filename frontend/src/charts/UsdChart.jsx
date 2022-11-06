@@ -16,7 +16,7 @@ function UsdChart() {
   const [usd, setUsd] = useState([]);
   let closeValueArr =[];
   let dateArr =[];
-  const url = `http://localhost:8080/api/usd`;
+  const url = `http://localhost:8080/api/currency/?currency=USD`;
   ChartJS.register(
     CategoryScale,
     LinearScale,

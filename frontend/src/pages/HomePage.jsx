@@ -4,6 +4,7 @@ import ChfChart from '../charts/ChfChart';
 import GbpChart from '../charts/GbpChart';
 import UsdChart from '../charts/UsdChart';
 import AllChart from '../charts/AllChart';
+import JpyChart from '../charts/JpyChart';
 import Box from '@mui/material/Box';
 import Tab from '@mui/material/Tab';
 import {TabContext} from '@mui/lab';
@@ -26,7 +27,8 @@ import {TabPanel} from '@mui/lab';
             <Tab label="Euro" value="1" />
             <Tab label="Dolar amerykański" value="2" />
             <Tab label="Frank szwajcarski" value="3" />
-            <Tab label="Funt brytyjski" value="4" />
+            <Tab label="Funt szterling" value="4" />
+            <Tab label="Jen japoński" value="5" />
           </TabList>
         </Box>
         <TabPanel value="0" ><AllChart/></TabPanel>
@@ -34,6 +36,7 @@ import {TabPanel} from '@mui/lab';
         <TabPanel value="2"><UsdChart/></TabPanel>
         <TabPanel value="3"><ChfChart/></TabPanel>
         <TabPanel value="4"><GbpChart/></TabPanel>
+        <TabPanel value="5"><JpyChart/></TabPanel>
       </TabContext>
     </Box>
   );

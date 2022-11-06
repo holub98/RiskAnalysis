@@ -15,7 +15,7 @@ function ChfChart() {
   const [chf, setChf] = useState([]);
   let closeValueArr =[];
   let dateArr =[];
-  const url = `http://localhost:8080/api/chf`;
+  const url = `http://localhost:8080/api/currency/?currency=CHF`;
 useEffect(()=>{
   axios.get(url).then((response)=>{
     setChf(response.data)

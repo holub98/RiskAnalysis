@@ -17,15 +17,18 @@ function AllChart() {
   const [chf, setChf] = useState([]);
   const [gbp, setGbp] = useState([]);
   const [usd, setUsd] = useState([]);
+  const [jpy, setJpy] = useState([]);
   let closeValueEuro =[];
   let closeValueChf =[];
   let closeValueGbp =[];
   let closeValueUsd =[];
+  let closeValueJpy =[];
   let dateArr =[];
-  const urlEuro = `http://localhost:8080/api/euro`;
-  const urlChf = `http://localhost:8080/api/chf`;
-  const urlGbp = `http://localhost:8080/api/Gbp`;
-  const urlUsd = `http://localhost:8080/api/Usd`;
+  const urlEuro = `http://localhost:8080/api/currency/?currency=EUR`;
+  const urlChf = `http://localhost:8080/api/currency/?currency=CHF`;
+  const urlGbp = `http://localhost:8080/api/currency/?currency=GBP`;
+  const urlUsd = `http://localhost:8080/api/currency/?currency=USD`;
+  const urlJpy = `http://localhost:8080/api/currency/?currency=JPY`;
   ChartJS.register(
     CategoryScale,
     LinearScale,
@@ -55,6 +58,11 @@ useEffect(()=>{
     setUsd(response.data)
   }) 
 },[urlUsd])
+useEffect(()=>{
+  axios.get(urlJpy).then((response)=>{
+    setJpy(response.data)
+  }) 
+},[urlJpy])
 
  for(let key in euro){
   closeValueEuro.push(euro[key].close);
@@ -69,10 +77,9 @@ useEffect(()=>{
  for(let key in usd){
   closeValueUsd.push(usd[key].close);
  }
-console.log(closeValueChf)
-console.log(closeValueEuro);
-console.log(closeValueGbp);
-console.log(closeValueUsd);
+ for(let key in jpy){
+  closeValueJpy.push(jpy[key].close);
+ }
 
   return (
     <Line
@@ -101,6 +108,12 @@ console.log(closeValueUsd);
         label: 'GBP/PLN',
         borderColor: '#9900CC',
         backgroundColor: '#9900CC',
+      },
+      {
+        data: closeValueJpy,
+        label: 'JPY/PLN',
+        borderColor: '#33BDB9',
+        backgroundColor: '#33BDB9',
       }
     ]
   }}
@@ -120,6 +133,7 @@ console.log(closeValueUsd);
   },
   }}
     />
+    
   )
 }
 

@@ -5,20 +5,10 @@ const app = express();
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const PORT = 8080;
-const User = require("./src/Controllers/user");
-const usdPLN = require("./src/Controllers/USD/saveToDbUsdpln");
-const gbpPLN = require("./src/Controllers/GBP/saveToDbGbppln");
-const chfPLN = require("./src/Controllers/CHF/saveToDbChfpln");
-const eurPLN = require("./src/Controllers/EUR/saveToDbEurpln");
-const euro = require("./src/Controllers/EUR/euro");
-const chf = require("./src/Controllers/CHF/chf");
-const usd = require("./src/Controllers/USD/usd");
-const gbp = require("./src/Controllers/GBP/gbp");
-const jpy = require("./src/Controllers/JPY/jpy");
-const SD = require("./src/Controllers/standardDeviation");
-const rrVaR = require("./src/Controllers/relativeReturnVaR");
-const VaR = require("./src/Controllers/VaR");
-const jpyPLN = require("./src/Controllers/JPY/saveToDbJpypln");
+const SD = require("./src/Routes/standardDeviation");
+const rrVaR = require("./src/Routes/relativeReturnVaR");
+const VaR = require("./src/Routes/VaR");
+const currency = require("./src/Routes/currency");
 
 dotenv.config();
 const connectionParams = {
@@ -38,25 +28,14 @@ db.once("open", function () {
 app.use(bodyParser.json());
 
 app.use(cors());
-app.use(User);
-app.use(euro);
-app.use(chf);
-app.use(usd);
-app.use(gbp);
-app.use(jpy);
-app.use(SD);
-app.use(rrVaR);
-app.use(VaR);
-app.use(jpyPLN);
-app.use(usdPLN);
-app.use(gbpPLN);
-app.use(chfPLN);
-app.use(eurPLN);
+app.use("/api/rrVaR", rrVaR);
+app.use("/api/var", VaR);
+app.use("/api/standard-deviation", SD);
+app.use("/api/currency", currency);
 app.get("/", (req, res) => {
   res.send("hello world");
 });
 
-app.use(bodyParser.json());
 app.listen(PORT, function () {
   connect();
   console.log("Server is running on Port");

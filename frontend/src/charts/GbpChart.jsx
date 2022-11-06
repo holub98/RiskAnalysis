@@ -16,7 +16,7 @@ function GbpChart() {
   const [gbp, setGbp] = useState([]);
   let closeValueArr =[];
   let dateArr =[];
-  const url = `http://localhost:8080/api/gbp`;
+  const url = `http://localhost:8080/api/currency/?currency=GBP`;
   ChartJS.register(
     CategoryScale,
     LinearScale,
@@ -58,7 +58,7 @@ useEffect(()=>{
     },
     title: {
       display: true,
-      text: 'Wykres historyczny dla kursu Funta brytyjskiego',
+      text: 'Wykres historyczny dla kursu Funta szterlinga',
     },
   },
   }}

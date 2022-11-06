@@ -1,4 +1,4 @@
-import React, { useEffect, useState} from 'react'
+import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import {
   Chart as ChartJS,
@@ -11,29 +11,30 @@ import {
   Legend,
 } from 'chart.js';
 import { Line } from "react-chartjs-2";
-const EuroChart =() => {
-  const [euro, setEuro] = useState([]);
+
+function JpyChart() {
+  const [jpy, setJpy] = useState([]);
   let closeValueArr =[];
   let dateArr =[];
-  const url = `http://localhost:8080/api/currency/?currency=EUR`;
+  const url = `http://localhost:8080/api/currency/?currency=JPY`;
+  ChartJS.register(
+    CategoryScale,
+    LinearScale,
+    PointElement,
+    LineElement,
+    Title,
+    Tooltip,
+    Legend
+  );
 useEffect(()=>{
   axios.get(url).then((response)=>{
-    setEuro(response.data)
+    setJpy(response.data)
   }) 
 },[url])
 
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend
-);
- for(let key in euro){
-  closeValueArr.push(euro[key].close);
-  dateArr.push(euro[key].date.substring(0,10));
+ for(let key in jpy){
+  closeValueArr.push(jpy[key].close);
+  dateArr.push(jpy[key].date.substring(0,10));
  }
   return (
     <Line
@@ -41,9 +42,9 @@ ChartJS.register(
       labels: dateArr,
       datasets:[{
         data: closeValueArr,
-        label: 'EUR/PLN',
-        borderColor: '#0000FF',
-        backgroundColor: '#0000FF',
+        label: 'JPY/PLN',
+        borderColor: '	#33BDB9',
+        backgroundColor: '#33BDB9',
       }]
   }}
   options={{
@@ -57,13 +58,12 @@ ChartJS.register(
     },
     title: {
       display: true,
-      text: 'Wykres historyczny dla kursu Euro',
+      text: 'Wykres historyczny dla kursu Dolara amerykańskiego',
     },
   },
   }}
     />
-
   )
 }
 
-export default EuroChart
+export default JpyChart
