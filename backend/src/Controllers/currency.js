@@ -2,11 +2,13 @@ const currencyModel = require("../Models/currency");
 const RoRModel = require("../Models/dLRoR");
 const request = require("request");
 const moment = require("moment");
+const dotenv = require("dotenv");
+dotenv.config();
 
 exports.createCurrency = async (req, res) => {
   const currency = req.query.currency;
   try {
-    var url = `https://www.alphavantage.co/query?function=FX_DAILY&from_symbol=${currency}&to_symbol=PLN&outputsize=full&apikey=4AOCSQKH2KXMMI46`;
+    var url = `https://www.alphavantage.co/query?function=FX_DAILY&from_symbol=${currency}&to_symbol=PLN&outputsize=full&apikey=${process.env.APIKEY}`;
 
     const today = Date.now();
     const now = moment(today).format("YYYY-MM-DD");
