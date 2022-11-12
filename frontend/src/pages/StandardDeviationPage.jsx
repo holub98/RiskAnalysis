@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import { DatePicker, Select, Button } from "antd";
 import "antd/dist/antd.css";
@@ -6,46 +6,10 @@ import moment from "moment";
 const StandardDeviationPage = () => {
   const [show, setShow] = useState(false);
   const [sd, setSd] = useState([]);
-  const [startDate, setStartDate] = useState();
-  const [endDate, setEndDate] = useState();
-  const [currency, setCurrency] = useState();
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const [currency, setCurrency] = useState("");
 
-  const url = "http://localhost:8080/api/standard-deviation";
-
-  // axios.post(url, null, {
-  //   params: {
-  //     startDate: moment(startDate).format("YYYY-MM-DD"),
-  //     endDate: moment(endDate).format("YYYY-MM-DD"),
-  //     currency: currency,
-  //   },
-  // });
-
-  // console.log(`post data ${currency}`);
-  const StandardDeviations = useCallback(() => {
-    axios
-      .get(
-        `http://localhost:8080/api/standard-deviation?startDate=${moment(
-          startDate
-        ).format("YYYY-MM-DD")}&endDate=${moment(endDate).format(
-          "YYYY-MM-DD"
-        )}&currency=${currency}`
-      )
-      .then((response) => {
-        setSd((result) => [...result, response.data]);
-      })
-      .catch((err) => {
-        if (err.response) {
-          console.log(err.response);
-        } else if (err.request) {
-          console.log(err.request);
-        } else {
-          console.log("Error", err.message);
-        }
-      });
-
-    console.log(`get data ${currency} ${startDate} ${endDate}`);
-    console.log(sd);
-  }, [currency, endDate, sd, startDate]);
   const selectStartDate = (value) => {
     setStartDate(value);
   };
@@ -55,12 +19,56 @@ const StandardDeviationPage = () => {
   const selectCurrency = (value) => {
     setCurrency(value);
   };
+  console.log(moment(startDate).format("YYYY-MM-DD"));
+  console.log(moment(endDate).format("YYYY-MM-DD"));
+  console.log(currency);
+
+  const createSd = async () => {
+    try {
+      await axios.post(`http://localhost:8080/api/standard-deviation`, null, {
+        params: {
+          startDate: moment(startDate).format("YYYY-MM-DD"),
+          endDate: moment(endDate).format("YYYY-MM-DD"),
+          currency: currency,
+        },
+      });
+
+      console.log("coś tam, response post");
+    } catch (err) {
+      console.log(err.message);
+    } finally {
+    }
+  };
+  const findSd = async () => {
+    try {
+      const { data } = await axios.get(
+        `http://localhost:8080/api/standard-deviation`,
+        {
+          params: {
+            startDate: moment(startDate).format("YYYY-MM-DD"),
+            endDate: moment(endDate).format("YYYY-MM-DD"),
+            currency: currency,
+          },
+        }
+      );
+      setSd(data);
+      console.log("coś tam, response get");
+    } catch (err) {
+      console.log(err.message);
+    } finally {
+    }
+  };
+  const handleClickSd = () => {
+    createSd();
+    setTimeout(findSd, 1000);
+  };
+  console.log(sd);
   return (
     <>
       <DatePicker onChange={selectStartDate} />
       <DatePicker onChange={selectEndDate} />
       <Select
-        style={{ width: 120 }}
+        style={{ width: 200 }}
         onChange={selectCurrency}
         options={[
           {
@@ -87,7 +95,7 @@ const StandardDeviationPage = () => {
       />
       <Button
         onClick={() => {
-          StandardDeviations();
+          handleClickSd();
         }}>
         Oblicz
       </Button>

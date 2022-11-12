@@ -16,6 +16,11 @@ function App() {
         />
         <Route
           exact
+          path="/relative-return-var"
+          element={<RelativeReturnVaRPage />}
+        />
+        <Route
+          exact
           path="/standard-deviation"
           element={<StandardDeviationPage />}
         />

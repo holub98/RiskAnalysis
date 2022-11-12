@@ -26,42 +26,74 @@ function AllChart() {
   const urlJpy = `http://localhost:8080/api/currency/?currency=JPY`;
 
   useEffect(() => {
-    try {
-      axios.get(urlEuro).then((response) => {
-        setEuro(response.data).catch((err) => {
-          if (err.response) {
-            console.log(err.response);
-          } else if (err.request) {
-            console.log(err.request);
-          } else {
-            console.log("Error", err.message);
-          }
-        });
-      });
-    } catch (err) {
-      console.log(err);
-    }
-  }, [euro, urlEuro]);
+    // fetch data
+    const dataFetch = async () => {
+      const data = await (
+        await fetch("http://localhost:8080/api/currency/?currency=EUR")
+      ).json();
+
+      // set state when the data received
+      setEuro(data);
+    };
+
+    dataFetch();
+  }, []);
+
   useEffect(() => {
-    axios.get(urlChf).then((response) => {
-      setChf(response.data).catch((err) => console.log(err.response.data));
-    });
-  }, [chf, urlChf]);
+    // fetch data
+    const dataFetch = async () => {
+      const data = await (
+        await fetch("http://localhost:8080/api/currency/?currency=CHF")
+      ).json();
+
+      // set state when the data received
+      setChf(data);
+    };
+
+    dataFetch();
+  }, []);
+
   useEffect(() => {
-    axios.get(urlGbp).then((response) => {
-      setGbp(response.data).catch((err) => console.log(err.response.data));
-    });
-  }, [gbp, urlGbp]);
+    // fetch data
+    const dataFetch = async () => {
+      const data = await (
+        await fetch("http://localhost:8080/api/currency/?currency=USD")
+      ).json();
+
+      // set state when the data received
+      setUsd(data);
+    };
+
+    dataFetch();
+  }, []);
+
   useEffect(() => {
-    axios.get(urlUsd).then((response) => {
-      setUsd(response.data).catch((err) => console.log(err.response.data));
-    });
-  }, [usd, urlUsd]);
+    // fetch data
+    const dataFetch = async () => {
+      const data = await (
+        await fetch("http://localhost:8080/api/currency/?currency=GBP")
+      ).json();
+
+      // set state when the data received
+      setGbp(data);
+    };
+
+    dataFetch();
+  }, []);
+
   useEffect(() => {
-    axios.get(urlJpy).then((response) => {
-      setJpy(response.data).catch((err) => console.log(err.response.data));
-    });
-  }, [jpy, urlJpy]);
+    // fetch data
+    const dataFetch = async () => {
+      const data = await (
+        await fetch("http://localhost:8080/api/currency/?currency=JPY")
+      ).json();
+
+      // set state when the data received
+      setJpy(data);
+    };
+
+    dataFetch();
+  }, []);
   for (let key in euro) {
     closeValueEuro.push(euro[key].close);
     dateEuroArr.push(euro[key].date.substring(0, 10));
@@ -83,10 +115,7 @@ function AllChart() {
     dateJpyArr.push(jpy[key].date.substring(0, 10));
   }
   console.log(jpy);
-  console.log(usd);
-  console.log(gbp);
-  console.log(chf);
-  console.log(euro);
+  console.log(closeValueJpy);
   return (
     <Plot
       data={[
