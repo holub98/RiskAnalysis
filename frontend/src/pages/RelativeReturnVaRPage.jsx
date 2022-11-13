@@ -20,9 +20,6 @@ const RelativeReturnVaRPage = () => {
   const selectDates = (value) => {
     setDates(value);
   };
-
-  console.log(dates);
-
   const selectCurrency = (value) => {
     setCurrency(value);
   };
@@ -41,10 +38,6 @@ const RelativeReturnVaRPage = () => {
         setDateLimit(response.data);
       });
   }, [urlCurrency, currency]);
-  if (dateLimit.length > 0) {
-    console.log(moment(dateLimit[0].date).format("YYYY-MM-DD"));
-    console.log(dateLimit[dateLimit.length - 1].date);
-  }
   const disabledDates = (value) => {
     if (dateLimit.length > 0) {
       return (
@@ -53,7 +46,7 @@ const RelativeReturnVaRPage = () => {
           new Date(moment(dateLimit[dateLimit.length - 1].date).add(1, "days"))
       );
     } else {
-      return value < moment().subtract(31, "days");
+      return value > moment().subtract(1, "days");
     }
   };
   const createRrVaR = async () => {
@@ -106,7 +99,7 @@ const RelativeReturnVaRPage = () => {
     setDateLimit([]);
   };
 
-  const ShowRRVaR = () => {
+  const ResultRRVaR = () => {
     const index = currencyValue.indexOf(currency);
 
     return (
@@ -190,96 +183,97 @@ const RelativeReturnVaRPage = () => {
       </>
     );
   };
-  return (
-    <>
-      <Space direction="vertical">
-        <Typography>
-          <Text>
-            Wybierz walutę, dla której chcesz obliczyć względną wartość
-            zagrożoną
-          </Text>
-        </Typography>
-        <Typography>
-          <Select
-            style={{ width: 200 }}
-            onChange={selectCurrency}
-            options={[
-              {
-                value: "EUR",
-                label: "Euro",
-              },
-              {
-                value: "GBP",
-                label: "Funt szterling",
-              },
-              {
-                value: "CHF",
-                label: "Frank szwajcarski",
-              },
-              {
-                value: "USD",
-                label: "Dolar amerykaski",
-              },
-              {
-                value: "JPY",
-                label: "Jen japoński",
-              },
-            ]}
-            disabled={show}
-            value={currency !== "" ? currency : "Wybierz walutę"}
-          />
-        </Typography>
-        <Typography>
-          <Text>Wybierz datę początkową oraz końcową do obliczeń</Text>
-        </Typography>
-        <Typography>
-          <RangePicker
-            onChange={selectDates}
-            format={"DD/MM/YYYY"}
-            disabled={show}
-            value={dates !== [] ? dates : []}
-            disabledDate={disabledDates}
-          />
-        </Typography>
-        <Typography>
-          <Text>Wybierz poziom ufności</Text>
-        </Typography>
-        <Typography>
-          <Select
-            style={{ width: 200 }}
-            onChange={selectConfidenceLevel}
-            options={[
-              {
-                value: 0.01,
-                label: "α = 0,01",
-              },
-              {
-                value: 0.05,
-                label: "α = 0,05",
-              },
-            ]}
-            disabled={show}
-            value={
-              confidenceLevel !== ""
-                ? confidenceLevel
-                : "Wybierz poziom ufności"
-            }
-          />
-        </Typography>
-        <Typography>
-          <Button
-            onClick={() => {
-              handleClickRrVaR();
-            }}
-            disabled={show}>
-            Oblicz
-          </Button>
-        </Typography>
-
-        {show ? <ShowRRVaR /> : null}
-      </Space>
-    </>
-  );
+  const InputForm = () => {
+    return (
+      <>
+        <Space direction="vertical">
+          <Typography>
+            <Text>
+              Wybierz walutę, dla której chcesz obliczyć względną wartość
+              zagrożoną
+            </Text>
+          </Typography>
+          <Typography>
+            <Select
+              style={{ width: 200 }}
+              onChange={selectCurrency}
+              options={[
+                {
+                  value: "EUR",
+                  label: "Euro",
+                },
+                {
+                  value: "GBP",
+                  label: "Funt szterling",
+                },
+                {
+                  value: "CHF",
+                  label: "Frank szwajcarski",
+                },
+                {
+                  value: "USD",
+                  label: "Dolar amerykaski",
+                },
+                {
+                  value: "JPY",
+                  label: "Jen japoński",
+                },
+              ]}
+              disabled={show}
+              value={currency !== "" ? currency : "Wybierz walutę"}
+            />
+          </Typography>
+          <Typography>
+            <Text>Wybierz datę początkową oraz końcową do obliczeń</Text>
+          </Typography>
+          <Typography>
+            <RangePicker
+              onChange={selectDates}
+              format={"DD/MM/YYYY"}
+              disabled={show}
+              value={dates !== [] ? dates : []}
+              disabledDate={disabledDates}
+            />
+          </Typography>
+          <Typography>
+            <Text>Wybierz poziom ufności</Text>
+          </Typography>
+          <Typography>
+            <Select
+              style={{ width: 200 }}
+              onChange={selectConfidenceLevel}
+              options={[
+                {
+                  value: 0.01,
+                  label: "α = 0,01",
+                },
+                {
+                  value: 0.05,
+                  label: "α = 0,05",
+                },
+              ]}
+              disabled={show}
+              value={
+                confidenceLevel !== ""
+                  ? confidenceLevel
+                  : "Wybierz poziom ufności"
+              }
+            />
+          </Typography>
+          <Typography>
+            <Button
+              onClick={() => {
+                handleClickRrVaR();
+              }}
+              disabled={show}>
+              Oblicz
+            </Button>
+          </Typography>
+        </Space>
+      </>
+    );
+  };
+  return <>{!show ? <InputForm /> : <ResultRRVaR />}</>;
 };
 
 export default RelativeReturnVaRPage;
