@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Plot from "react-plotly.js";
 
-function AllChart() {
+const AllChart = () => {
   const [euro, setEuro] = useState([]);
   const [chf, setChf] = useState([]);
   const [gbp, setGbp] = useState([]);
@@ -19,81 +19,64 @@ function AllChart() {
   let dateUsdArr = [];
   let dateJpyArr = [];
 
-  const urlEuro = `http://localhost:8080/api/currency/?currency=EUR`;
-  const urlChf = `http://localhost:8080/api/currency/?currency=CHF`;
-  const urlGbp = `http://localhost:8080/api/currency/?currency=GBP`;
-  const urlUsd = `http://localhost:8080/api/currency/?currency=USD`;
-  const urlJpy = `http://localhost:8080/api/currency/?currency=JPY`;
+  const url = `http://localhost:8080/api/currency`;
 
   useEffect(() => {
-    // fetch data
-    const dataFetch = async () => {
-      const data = await (
-        await fetch("http://localhost:8080/api/currency/?currency=EUR")
-      ).json();
-
-      // set state when the data received
-      setEuro(data);
-    };
-
-    dataFetch();
-  }, []);
-
+    axios
+      .get(`${url}`, {
+        params: {
+          currency: "EUR",
+        },
+      })
+      .then((response) => {
+        setEuro(response.data);
+      });
+  }, [url]);
   useEffect(() => {
-    // fetch data
-    const dataFetch = async () => {
-      const data = await (
-        await fetch("http://localhost:8080/api/currency/?currency=CHF")
-      ).json();
-
-      // set state when the data received
-      setChf(data);
-    };
-
-    dataFetch();
-  }, []);
-
+    axios
+      .get(`${url}`, {
+        params: {
+          currency: "CHF",
+        },
+      })
+      .then((response) => {
+        setChf(response.data);
+      });
+  }, [url]);
   useEffect(() => {
-    // fetch data
-    const dataFetch = async () => {
-      const data = await (
-        await fetch("http://localhost:8080/api/currency/?currency=USD")
-      ).json();
-
-      // set state when the data received
-      setUsd(data);
-    };
-
-    dataFetch();
-  }, []);
-
+    axios
+      .get(`${url}`, {
+        params: {
+          currency: "USD",
+        },
+      })
+      .then((response) => {
+        setUsd(response.data);
+      });
+  }, [url]);
   useEffect(() => {
-    // fetch data
-    const dataFetch = async () => {
-      const data = await (
-        await fetch("http://localhost:8080/api/currency/?currency=GBP")
-      ).json();
-
-      // set state when the data received
-      setGbp(data);
-    };
-
-    dataFetch();
-  }, []);
-
+    axios
+      .get(`${url}`, {
+        params: {
+          currency: "GBP",
+        },
+      })
+      .then((response) => {
+        setGbp(response.data);
+      });
+  }, [url]);
   useEffect(() => {
-    // fetch data
-    const dataFetch = async () => {
-      const data = await (
-        await fetch("http://localhost:8080/api/currency/?currency=JPY")
-      ).json();
+    axios
+      .get(`${url}`, {
+        params: {
+          currency: "JPY",
+        },
+      })
+      .then((response) => {
+        setJpy(response.data);
+      });
+  }, [url]);
 
-      // set state when the data received
-      setJpy(data);
-    };
-
-    dataFetch();
-  }, []);
   for (let key in euro) {
     closeValueEuro.push(euro[key].close);
     dateEuroArr.push(euro[key].date.substring(0, 10));
@@ -168,6 +151,6 @@ function AllChart() {
       config={{ responsive: true, displaylogo: false }}
     />
   );
-}
+};
 
 export default AllChart;
