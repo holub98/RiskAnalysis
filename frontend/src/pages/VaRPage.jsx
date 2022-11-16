@@ -5,8 +5,9 @@ import {
   Select,
   Button,
   InputNumber,
-  Space,
   Typography,
+  Layout,
+  Card,
 } from "antd";
 import "antd/dist/antd.css";
 import moment from "moment";
@@ -17,23 +18,28 @@ const VaRPage = () => {
   const [vars, setVaRs] = useState([]);
   const [currency, setCurrency] = useState("");
   const [confidenceLevel, setConfidenceLevel] = useState("");
-  const [cost, setCost] = useState();
+  const [cost, setCost] = useState("");
   const [dates, setDates] = useState([]);
   const [dateLimit, setDateLimit] = useState([]);
   const url = `http://localhost:8080/api/var`;
   const urlCurrency = `http://localhost:8080/api/currency`;
+
   const selectDates = (value) => {
     setDates(value);
   };
+
   const selectCurrency = (value) => {
     setCurrency(value);
   };
+
   const selectConfidenceLevel = (value) => {
     setConfidenceLevel(value);
   };
+
   const selectCost = (value) => {
     setCost(value);
   };
+
   useEffect(() => {
     axios
       .get(`${urlCurrency}`, {
@@ -58,7 +64,7 @@ const VaRPage = () => {
   };
   const createVaR = async () => {
     try {
-      await axios.post(`http://localhost:8080/api/var`, null, {
+      await axios.post(`${url}`, null, {
         params: {
           startDate: moment(dates[0]._d).format("YYYY-MM-DD"),
           endDate: moment(dates[1]._d).format("YYYY-MM-DD"),
@@ -67,8 +73,6 @@ const VaRPage = () => {
           cost: cost,
         },
       });
-
-      console.log("coś tam, response post");
     } catch (err) {
       console.log(err.message);
     } finally {
@@ -76,7 +80,7 @@ const VaRPage = () => {
   };
   const findVaR = async () => {
     try {
-      const { data } = await axios.get(`http://localhost:8080/api/var`, {
+      const { data } = await axios.get(`${url}`, {
         params: {
           startDate: moment(dates[0]._d).format("YYYY-MM-DD"),
           endDate: moment(dates[1]._d).format("YYYY-MM-DD"),
@@ -86,7 +90,6 @@ const VaRPage = () => {
         },
       });
       setVaRs(data);
-      console.log("coś tam, response get");
     } catch (err) {
       console.log(err.message);
     } finally {
@@ -104,49 +107,52 @@ const VaRPage = () => {
     setDates([]);
     setConfidenceLevel("");
     setDateLimit([]);
-    setCost();
+    setCost("");
   };
   const ResultVaR = () => {
     return (
       <>
-        <Typography>
-          <Text>Wartość zagrożona</Text>
-          <Text strong> {currency}/PLN </Text>
-          <Text>o wartości inwestycji </Text>
-          <Text strong> {cost} </Text>
-          <Text>w okresie </Text>
-          <Text strong>
-            {" "}
-            {moment(dates[0]._d).format("DD/MM/YYYY")} -{" "}
-            {moment(dates[1]._d).format("DD/MM/YYYY")}
-          </Text>
-          <Text> przy poziomie istotniości </Text>
-          <Text strong>{confidenceLevel} </Text>
-          <Text>wynosi: </Text>
-          <Text
-            style={{
-              color: "red",
-            }}
-            strong>
-            {Number(vars[0].value).toFixed(4)}
-          </Text>
-        </Typography>
-
-        <Button onClick={clearState}>Oblicz ponownie</Button>
+        <div className="display">
+          <div>
+            <Typography.Title level={5}>
+              Wartość zagrożona {currency}/PLN o wartości inwestycji {cost} w{" "}
+              okresie {moment(dates[0]._d).format("DD/MM/YYYY")} -{" "}
+              {moment(dates[1]._d).format("DD/MM/YYYY")} przy poziomie
+              istotniości {confidenceLevel} wynosi:
+            </Typography.Title>
+            <Typography.Title
+              level={4}
+              style={{
+                color: "red",
+              }}>
+              {Number(vars[0].value).toFixed(4)}
+            </Typography.Title>
+          </div>
+          <div className="display">
+            <Text>Opis co oznacza ten wynik</Text>
+          </div>
+        </div>
+        <div className="input">
+          <Button
+            onClick={() => {
+              clearState();
+            }}>
+            Oblicz ponownie
+          </Button>
+        </div>
       </>
     );
   };
-  const InputForm = () => {
-    return (
-      <>
-        <Space direction="vertical">
-          <Typography>
-            <Text>
-              Wybierz walutę, dla której chcesz obliczyć względną wartość
-              zagrożoną
-            </Text>
-          </Typography>
-          <Typography>
+
+  return (
+    <Layout className="layout">
+      <Card className="card">
+        <div className="display">
+          <Typography.Title level={2}>Wartość zagrożona</Typography.Title>
+        </div>
+        <div className="display">
+          <div className="input">
+            <Text>Wybierz walutę: </Text>
             <Select
               style={{ width: 200 }}
               onChange={selectCurrency}
@@ -175,41 +181,29 @@ const VaRPage = () => {
               disabled={show}
               value={currency !== "" ? currency : "Wybierz walutę"}
             />
-          </Typography>
-          <Typography>
-            <Text>Wybierz datę początkową oraz końcową do obliczeń</Text>
-          </Typography>
-          <Typography>
+          </div>
+          <div className="input">
+            <Text>Wybierz daty: </Text>
             <RangePicker
               onChange={selectDates}
               format={"DD/MM/YYYY"}
               disabled={show}
-              value={
-                dates !== []
-                  ? dates
-                  : ["wybierz datę początkową", "wybierz datę końcową"]
-              }
+              value={dates !== [] ? dates : []}
               disabledDate={disabledDates}
             />
-          </Typography>
-          <Typography>
-            <Text>Wybierz wartość inwestycji</Text>
-          </Typography>
-          <Typography>
+          </div>
+          <div className="input">
+            <Text>Wybierz kwotę inwestycji: </Text>
             <InputNumber
               onChange={selectCost}
               addonAfter="PLN"
               min={1}
-              precision={2}
-              step={0.01}
               disabled={show}
-              value={cost !== "" ? cost : "Wybierz wartość inwestycji"}
+              value={cost !== "" ? cost : ""}
             />
-          </Typography>
-          <Typography>
-            <Text>Wybierz poziom ufności</Text>
-          </Typography>
-          <Typography>
+          </div>
+          <div className="input">
+            <Text>Wybierz poziom ufności: </Text>
             <Select
               style={{ width: 200 }}
               onChange={selectConfidenceLevel}
@@ -230,21 +224,27 @@ const VaRPage = () => {
                   : "Wybierz poziom ufności"
               }
             />
-          </Typography>
-          <Typography>
+          </div>
+          <div className="input">
             <Button
               onClick={() => {
                 handleClickVaR();
               }}
-              disabled={show}>
+              disabled={
+                show ||
+                currency.length !== 3 ||
+                (confidenceLevel !== 0.05 && confidenceLevel !== 0.01) ||
+                cost < 1 ||
+                dates.length !== 2
+              }>
               Oblicz
             </Button>
-          </Typography>
-        </Space>
-      </>
-    );
-  };
-  return !show ? <InputForm /> : <ResultVaR />;
+          </div>
+        </div>
+        {show ? <ResultVaR /> : null}
+      </Card>
+    </Layout>
+  );
 };
 
 export default VaRPage;

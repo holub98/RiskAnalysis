@@ -1,0 +1,23 @@
+.layout {
+    padding: 5%; 
+    background: #e6e7e7;
+    height: 100vh
+}
+
+.card{
+    width: 60%;
+    height: 80%;
+    position: fixed;
+    left: 25%;
+    
+}
+
+.display{
+    text-align: center;
+}
+.input{
+    text-align: center;
+    margin-bottom: 1vh;
+    margin-top: 0.5vh;
+    
+}

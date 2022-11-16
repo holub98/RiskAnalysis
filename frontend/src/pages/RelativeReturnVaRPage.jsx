@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { DatePicker, Select, Button, Typography, Space } from "antd";
+import { DatePicker, Select, Button, Typography, Layout, Card } from "antd";
 import "antd/dist/antd.css";
 import Plot from "react-plotly.js";
 import moment from "moment";
@@ -17,6 +17,7 @@ const RelativeReturnVaRPage = () => {
   const urlCurrency = `http://localhost:8080/api/currency`;
   let value = [];
   let currencyValue = [];
+  useEffect(() => {}, []);
   const selectDates = (value) => {
     setDates(value);
   };
@@ -104,96 +105,113 @@ const RelativeReturnVaRPage = () => {
 
     return (
       <>
-        <Typography>
-          <Text>Względna wartość zagrożona</Text>
-          <Text strong> {currency}/PLN </Text>
-          <Text>w okresie </Text>
-          <Text strong>
-            {" "}
-            {moment(dates[0]._d).format("DD/MM/YYYY")} -{" "}
-            {moment(dates[1]._d).format("DD/MM/YYYY")}
-          </Text>
-          <Text> przy poziomie istotniości </Text>
-          <Text strong>{confidenceLevel} </Text>
-          <Text>wynosi: </Text>
-          <Text
-            style={{
-              color:
-                Number(value[index] * 100).toFixed(4) > 0
-                  ? "rgb(14, 203, 129)"
-                  : "red",
-            }}
-            strong>
-            {Number(value[index] * 100).toFixed(4)}%
-          </Text>
-        </Typography>
-        {moment(dates[0]._d).format("YYYY-MM-DD") >
-        moment("2014/11/07").format("YYYY-MM-DD") ? (
-          <Plot
-            data={[
-              {
-                x: [currencyValue[0]],
-                y: [Number(value[0] * 100).toFixed(4)],
-                type: "bar",
-                marker: { color: "#0000FF" },
-                name: `${currencyValue[0]}/PLN`,
-              },
-              {
-                x: [currencyValue[1]],
-                y: [Number(value[1] * 100).toFixed(4)],
-                type: "bar",
-                marker: { color: "#9900CC" },
-                name: `${currencyValue[1]}/PLN`,
-              },
-              {
-                x: [currencyValue[2]],
-                y: [Number(value[2] * 100).toFixed(4)],
-                type: "bar",
-                marker: { color: "#008000" },
-                name: `${currencyValue[2]}/PLN`,
-              },
-              {
-                x: [currencyValue[3]],
-                y: [Number(value[3] * 100).toFixed(4)],
-                type: "bar",
-                marker: { color: "#FF0000" },
-                name: `${currencyValue[3]}/PLN`,
-              },
-              {
-                x: [currencyValue[4]],
-                y: [Number(value[4] * 100).toFixed(4)],
-                type: "bar",
-                marker: { color: "#33BDB9" },
-                name: `${currencyValue[4]}/PLN`,
-              },
-            ]}
-            layout={{
-              width: 1500,
-              height: 650,
-              title: `Porównanie względnego odchylenia standardowego w okresie ${moment(
-                dates[0]._d
-              ).format("DD/MM/YYYY")} - ${moment(dates[1]._d).format(
-                "DD/MM/YYYY"
-              )} przy poziomie istotniości ${confidenceLevel} `,
-            }}
-            config={{ responsive: true, displaylogo: false }}
-          />
-        ) : null}
-        <Button onClick={clearState}>Oblicz ponownie</Button>
+        <div className="display">
+          <div>
+            <Typography.Title level={5}>
+              Względna wartość zagrożona {currency}/PLN w okresie{" "}
+              {moment(dates[0]._d).format("DD/MM/YYYY")} -{" "}
+              {moment(dates[1]._d).format("DD/MM/YYYY")} przy poziomie
+              istotniości {Number(confidenceLevel * 100)}% wynosi:
+            </Typography.Title>
+            <Typography.Title
+              level={4}
+              style={{
+                color:
+                  Number(value[index] * 100).toFixed(4) > 0
+                    ? "rgb(14, 203, 129)"
+                    : "red",
+              }}>
+              {Number(value[index] * 100).toFixed(4)}%
+            </Typography.Title>
+          </div>
+          <div className="display">
+            {(value[index] * 100).toFixed(4) > 0 ? (
+              <Text>Opis co oznacza ten wynik</Text>
+            ) : (
+              <Text>Opis co jak wynik jest mniejszy od 0</Text>
+            )}
+          </div>
+          {moment(dates[0]._d).format("YYYY-MM-DD") >
+          moment("2014/11/07").format("YYYY-MM-DD") ? (
+            <Plot
+              data={[
+                {
+                  x: [currencyValue[0]],
+                  y: [Number(value[0] * 100).toFixed(4)],
+                  type: "bar",
+                  marker: { color: "#0000FF" },
+                  name: `${currencyValue[0]}/PLN`,
+                },
+                {
+                  x: [currencyValue[1]],
+                  y: [Number(value[1] * 100).toFixed(4)],
+                  type: "bar",
+                  marker: { color: "#9900CC" },
+                  name: `${currencyValue[1]}/PLN`,
+                },
+                {
+                  x: [currencyValue[2]],
+                  y: [Number(value[2] * 100).toFixed(4)],
+                  type: "bar",
+                  marker: { color: "#008000" },
+                  name: `${currencyValue[2]}/PLN`,
+                },
+                {
+                  x: [currencyValue[3]],
+                  y: [Number(value[3] * 100).toFixed(4)],
+                  type: "bar",
+                  marker: { color: "#FF0000" },
+                  name: `${currencyValue[3]}/PLN`,
+                },
+                {
+                  x: [currencyValue[4]],
+                  y: [Number(value[4] * 100).toFixed(4)],
+                  type: "bar",
+                  marker: { color: "#33BDB9" },
+                  name: `${currencyValue[4]}/PLN`,
+                },
+              ]}
+              layout={{
+                width: 600,
+                height: 300,
+                title: `Porównanie względnej wartości zagrożonej dla podanych danych `,
+                xaxis: {
+                  title: "Porównywane waluty",
+                  showgrid: false,
+                  zeroline: false,
+                },
+                yaxis: {
+                  title: "Wartość w procentach",
+                  showline: false,
+                },
+              }}
+              config={{ responsive: true, displaylogo: false }}
+            />
+          ) : null}
+        </div>
+        <div className="input">
+          <Button
+            onClick={() => {
+              clearState();
+            }}>
+            Oblicz ponownie
+          </Button>
+        </div>
       </>
     );
   };
-  const InputForm = () => {
-    return (
-      <>
-        <Space direction="vertical">
-          <Typography>
-            <Text>
-              Wybierz walutę, dla której chcesz obliczyć względną wartość
-              zagrożoną
-            </Text>
-          </Typography>
-          <Typography>
+
+  return (
+    <Layout className="layout">
+      <Card className="card">
+        <div className="display">
+          <Typography.Title level={2}>
+            Względna wartość zagrożona
+          </Typography.Title>
+        </div>
+        <div className="display">
+          <div className="input">
+            <Text>Wybierz walutę: </Text>
             <Select
               style={{ width: 200 }}
               onChange={selectCurrency}
@@ -222,11 +240,9 @@ const RelativeReturnVaRPage = () => {
               disabled={show}
               value={currency !== "" ? currency : "Wybierz walutę"}
             />
-          </Typography>
-          <Typography>
-            <Text>Wybierz datę początkową oraz końcową do obliczeń</Text>
-          </Typography>
-          <Typography>
+          </div>
+          <div className="input">
+            <Text>Wybierz daty: </Text>
             <RangePicker
               onChange={selectDates}
               format={"DD/MM/YYYY"}
@@ -234,11 +250,9 @@ const RelativeReturnVaRPage = () => {
               value={dates !== [] ? dates : []}
               disabledDate={disabledDates}
             />
-          </Typography>
-          <Typography>
-            <Text>Wybierz poziom ufności</Text>
-          </Typography>
-          <Typography>
+          </div>
+          <div className="input">
+            <Text>Wybierz poziom ufności: </Text>
             <Select
               style={{ width: 200 }}
               onChange={selectConfidenceLevel}
@@ -259,21 +273,26 @@ const RelativeReturnVaRPage = () => {
                   : "Wybierz poziom ufności"
               }
             />
-          </Typography>
-          <Typography>
+          </div>
+          <div className="input">
             <Button
               onClick={() => {
                 handleClickRrVaR();
               }}
-              disabled={show}>
+              disabled={
+                show ||
+                currency.length !== 3 ||
+                (confidenceLevel !== 0.05 && confidenceLevel !== 0.01) ||
+                dates.length !== 2
+              }>
               Oblicz
             </Button>
-          </Typography>
-        </Space>
-      </>
-    );
-  };
-  return <>{!show ? <InputForm /> : <ResultRRVaR />}</>;
+          </div>
+        </div>
+        {show ? <ResultRRVaR /> : null}
+      </Card>
+    </Layout>
+  );
 };
 
 export default RelativeReturnVaRPage;
