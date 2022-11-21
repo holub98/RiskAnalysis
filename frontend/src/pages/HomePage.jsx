@@ -101,13 +101,14 @@ const HomePage = () => {
     <Layout className="layout">
       <Card className="card">
         <Plot
+          data-test-id="wykres-walut"
           data={[
             {
               x: dateEuroArr,
               y: closeValueEuro,
               type: "scatter",
               mode: "lines",
-              marker: { color: "#0000FF" },
+              marker: { color: "#A7226E" },
               name: "EUR/PLN",
             },
             {
@@ -115,7 +116,7 @@ const HomePage = () => {
               y: closeValueChf,
               type: "scatter",
               mode: "lines",
-              marker: { color: "#FF0000" },
+              marker: { color: "#EC2049" },
               name: "CHF/PLN",
             },
             {
@@ -123,7 +124,7 @@ const HomePage = () => {
               y: closeValueGbp,
               type: "scatter",
               mode: "lines",
-              marker: { color: "#9900CC" },
+              marker: { color: "#F26B38" },
               name: "GBP/PLN",
             },
             {
@@ -131,7 +132,7 @@ const HomePage = () => {
               y: closeValueUsd,
               type: "scatter",
               mode: "lines",
-              marker: { color: "#008000" },
+              marker: { color: "#F7DB4F" },
               name: "USD/PLN",
             },
             {
@@ -139,7 +140,7 @@ const HomePage = () => {
               y: closeValueJpy,
               type: "scatter",
               mode: "lines",
-              marker: { color: "#33BDB9" },
+              marker: { color: "#2F9599" },
               name: "JPY/PLN",
             },
           ]}

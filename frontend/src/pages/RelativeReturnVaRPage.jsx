@@ -107,7 +107,7 @@ const RelativeReturnVaRPage = () => {
       <>
         <div className="display">
           <div>
-            <Typography.Title level={5}>
+            <Typography.Title level={5} data-test-id="opis-wyniku-wzgledny-var">
               Względna wartość zagrożona {currency}/PLN w okresie{" "}
               {moment(dates[0]._d).format("DD/MM/YYYY")} -{" "}
               {moment(dates[1]._d).format("DD/MM/YYYY")} przy poziomie
@@ -117,83 +117,81 @@ const RelativeReturnVaRPage = () => {
               level={4}
               style={{
                 color:
-                  Number(value[index] * 100).toFixed(4) > 0
+                  Number(value[index]).toFixed(4) > 0
                     ? "rgb(14, 203, 129)"
                     : "red",
-              }}>
-              {Number(value[index] * 100).toFixed(4)}%
+              }}
+              data-test-id="wynik-wzgledny-var">
+              {Number(value[index]).toFixed(4)}
             </Typography.Title>
           </div>
           <div className="display">
-            {(value[index] * 100).toFixed(4) > 0 ? (
-              <Text>Opis co oznacza ten wynik</Text>
-            ) : (
-              <Text>Opis co jak wynik jest mniejszy od 0</Text>
-            )}
+            <Text data-test-id="interpretacja-wyniku-wzgledny-var">
+              Opis co oznacza ten wynik
+            </Text>
           </div>
-          {moment(dates[0]._d).format("YYYY-MM-DD") >
-          moment("2014/11/07").format("YYYY-MM-DD") ? (
-            <Plot
-              data={[
-                {
-                  x: [currencyValue[0]],
-                  y: [Number(value[0] * 100).toFixed(4)],
-                  type: "bar",
-                  marker: { color: "#0000FF" },
-                  name: `${currencyValue[0]}/PLN`,
-                },
-                {
-                  x: [currencyValue[1]],
-                  y: [Number(value[1] * 100).toFixed(4)],
-                  type: "bar",
-                  marker: { color: "#9900CC" },
-                  name: `${currencyValue[1]}/PLN`,
-                },
-                {
-                  x: [currencyValue[2]],
-                  y: [Number(value[2] * 100).toFixed(4)],
-                  type: "bar",
-                  marker: { color: "#008000" },
-                  name: `${currencyValue[2]}/PLN`,
-                },
-                {
-                  x: [currencyValue[3]],
-                  y: [Number(value[3] * 100).toFixed(4)],
-                  type: "bar",
-                  marker: { color: "#FF0000" },
-                  name: `${currencyValue[3]}/PLN`,
-                },
-                {
-                  x: [currencyValue[4]],
-                  y: [Number(value[4] * 100).toFixed(4)],
-                  type: "bar",
-                  marker: { color: "#33BDB9" },
-                  name: `${currencyValue[4]}/PLN`,
-                },
-              ]}
-              layout={{
-                width: 600,
-                height: 300,
-                title: `Porównanie względnej wartości zagrożonej dla podanych danych `,
-                xaxis: {
-                  title: "Porównywane waluty",
-                  showgrid: false,
-                  zeroline: false,
-                },
-                yaxis: {
-                  title: "Wartość w procentach",
-                  showline: false,
-                },
-              }}
-              config={{ responsive: true, displaylogo: false }}
-            />
-          ) : null}
+          <Plot
+            data-test-id="wykres-wzgledny-var"
+            data={[
+              {
+                x: [currencyValue[0]],
+                y: [Number(value[0] * 100).toFixed(4)],
+                type: "bar",
+                marker: { color: "#39a375" },
+                name: `${currencyValue[0]}/PLN`,
+              },
+              {
+                x: [currencyValue[1]],
+                y: [Number(value[1] * 100).toFixed(4)],
+                type: "bar",
+                marker: { color: "#00a4a5" },
+                name: `${currencyValue[1]}/PLN`,
+              },
+              {
+                x: [currencyValue[2]],
+                y: [Number(value[2] * 100).toFixed(4)],
+                type: "bar",
+                marker: { color: "#009fe1" },
+                name: `${currencyValue[2]}/PLN`,
+              },
+              {
+                x: [currencyValue[3]],
+                y: [Number(value[3] * 100).toFixed(4)],
+                type: "bar",
+                marker: { color: "#008eff" },
+                name: `${currencyValue[3]}/PLN`,
+              },
+              {
+                x: [currencyValue[4]],
+                y: [Number(value[4] * 100).toFixed(4)],
+                type: "bar",
+                marker: { color: "#8066ff" },
+                name: `${currencyValue[4]}/PLN`,
+              },
+            ]}
+            layout={{
+              width: 600,
+              height: 300,
+              title: `Porównanie względnej wartości zagrożonej dla podanych danych `,
+              xaxis: {
+                title: "Porównywane waluty",
+                showgrid: false,
+                zeroline: false,
+              },
+              yaxis: {
+                title: "Wartość w procentach",
+                showline: false,
+              },
+            }}
+            config={{ responsive: true, displaylogo: false }}
+          />
         </div>
         <div className="input">
           <Button
             onClick={() => {
               clearState();
-            }}>
+            }}
+            data-test-id="przycisk-wzgledny-var-ponownie">
             Oblicz ponownie
           </Button>
         </div>
@@ -205,7 +203,7 @@ const RelativeReturnVaRPage = () => {
     <Layout className="layout">
       <Card className="card">
         <div className="display">
-          <Typography.Title level={2}>
+          <Typography.Title level={2} data-test-id="wzgledny-var">
             Względna wartość zagrożona
           </Typography.Title>
         </div>
@@ -213,6 +211,7 @@ const RelativeReturnVaRPage = () => {
           <div className="input">
             <Text>Wybierz walutę: </Text>
             <Select
+              data-test-id="wybierz-walute"
               style={{ width: 200 }}
               onChange={selectCurrency}
               options={[
@@ -244,6 +243,7 @@ const RelativeReturnVaRPage = () => {
           <div className="input">
             <Text>Wybierz daty: </Text>
             <RangePicker
+              data-test-id="wybierz-daty"
               onChange={selectDates}
               format={"DD/MM/YYYY"}
               disabled={show}
@@ -254,6 +254,7 @@ const RelativeReturnVaRPage = () => {
           <div className="input">
             <Text>Wybierz poziom ufności: </Text>
             <Select
+              data-test-id="wybierz-poziom ufnosci"
               style={{ width: 200 }}
               onChange={selectConfidenceLevel}
               options={[
@@ -284,7 +285,8 @@ const RelativeReturnVaRPage = () => {
                 currency.length !== 3 ||
                 (confidenceLevel !== 0.05 && confidenceLevel !== 0.01) ||
                 dates.length !== 2
-              }>
+              }
+              data-test-id="przycisk-względny-var">
               Oblicz
             </Button>
           </div>

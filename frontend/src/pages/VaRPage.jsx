@@ -114,9 +114,13 @@ const VaRPage = () => {
       <>
         <div className="display">
           <div>
-            <Typography.Title level={5}>
-              Wartość zagrożona {currency}/PLN o wartości inwestycji {cost} w{" "}
-              okresie {moment(dates[0]._d).format("DD/MM/YYYY")} -{" "}
+            <Typography.Title level={5} data-test-id="opis-wyniku-var">
+              Wartość zagrożona {currency}/PLN o wartości inwestycji{" "}
+              {cost.toLocaleString("pl-PL", {
+                style: "currency",
+                currency: "PLN",
+              })}{" "}
+              w okresie {moment(dates[0]._d).format("DD/MM/YYYY")} -{" "}
               {moment(dates[1]._d).format("DD/MM/YYYY")} przy poziomie
               istotniości {confidenceLevel} wynosi:
             </Typography.Title>
@@ -124,19 +128,25 @@ const VaRPage = () => {
               level={4}
               style={{
                 color: "red",
-              }}>
+              }}
+              data-test-id="wynik-var">
               {Number(vars[0].value).toFixed(4)}
             </Typography.Title>
           </div>
           <div className="display">
-            <Text>Opis co oznacza ten wynik</Text>
+            <Text data-test-id="interpretacja-wyniku-var">
+              Wartość zagrożona {Number(vars[0].value).toFixed(4)} oznacza, że
+              inwestor poniesie taką stratę w{" "}
+              {Number(1 - confidenceLevel) * 100}%{" "}
+            </Text>
           </div>
         </div>
         <div className="input">
           <Button
             onClick={() => {
               clearState();
-            }}>
+            }}
+            data-test-id="przycisk-var-ponownie">
             Oblicz ponownie
           </Button>
         </div>
@@ -148,12 +158,15 @@ const VaRPage = () => {
     <Layout className="layout">
       <Card className="card">
         <div className="display">
-          <Typography.Title level={2}>Wartość zagrożona</Typography.Title>
+          <Typography.Title level={2} data-test-id="var">
+            Wartość zagrożona
+          </Typography.Title>
         </div>
         <div className="display">
           <div className="input">
             <Text>Wybierz walutę: </Text>
             <Select
+              data-test-id="wybierz-walute"
               style={{ width: 200 }}
               onChange={selectCurrency}
               options={[
@@ -185,6 +198,7 @@ const VaRPage = () => {
           <div className="input">
             <Text>Wybierz daty: </Text>
             <RangePicker
+              data-test-id="wybierz-daty"
               onChange={selectDates}
               format={"DD/MM/YYYY"}
               disabled={show}
@@ -195,6 +209,7 @@ const VaRPage = () => {
           <div className="input">
             <Text>Wybierz kwotę inwestycji: </Text>
             <InputNumber
+              data-test-id="wybierz-kwote"
               onChange={selectCost}
               addonAfter="PLN"
               min={1}
@@ -205,6 +220,7 @@ const VaRPage = () => {
           <div className="input">
             <Text>Wybierz poziom ufności: </Text>
             <Select
+              data-test-id="wybierz-poziom ufnosci"
               style={{ width: 200 }}
               onChange={selectConfidenceLevel}
               options={[
@@ -236,7 +252,8 @@ const VaRPage = () => {
                 (confidenceLevel !== 0.05 && confidenceLevel !== 0.01) ||
                 cost < 1 ||
                 dates.length !== 2
-              }>
+              }
+              data-test-id="przycisk-var">
               Oblicz
             </Button>
           </div>

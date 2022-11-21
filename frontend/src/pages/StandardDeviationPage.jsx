@@ -92,7 +92,9 @@ const StandardDeviationPage = () => {
       <>
         <div className="display">
           <div>
-            <Typography.Title level={5}>
+            <Typography.Title
+              level={5}
+              data-test-id="opis-wyniku-odchylenie-standardowe">
               Odchylenie standardowe {currency}/PLN w okresie{" "}
               {moment(dates[0]._d).format("DD/MM/YYYY")} -{" "}
               {moment(dates[1]._d).format("DD/MM/YYYY")} jest równe
@@ -102,14 +104,15 @@ const StandardDeviationPage = () => {
               style={{
                 color: "rgb(14, 203, 129)",
               }}
-              strong>
-              σ = {Number(sd[0].value).toFixed(6)} zł
+              strong
+              data-test-id="wynik-odchylenie-standardowe">
+              σ = {Number(sd[0].value).toFixed(6)}
             </Typography.Title>
           </div>
           <div className="display">
-            <Text>
-              Odchylenie standardowe jest tym lepsze, im wynik jest bliższy
-              zeru, ponieważ dane są blisko średniej.{" "}
+            <Text data-test-id="interpretacja-wyniku-odchylenie-standardowe">
+              Ryzyko obliczane za pomocą odchylenia standardowego jest mniejsze,
+              jeżeli wynik jest bliżej 0.
             </Text>
           </div>
         </div>
@@ -117,7 +120,8 @@ const StandardDeviationPage = () => {
           <Button
             onClick={() => {
               clearState();
-            }}>
+            }}
+            data-test-id="przycisk-odchylenie-standardowe-ponownie">
             Oblicz ponownie
           </Button>
         </div>
@@ -129,12 +133,15 @@ const StandardDeviationPage = () => {
     <Layout className="layout">
       <Card className="card">
         <div className="display">
-          <Typography.Title level={2}>Odchylenie standardowe</Typography.Title>
+          <Typography.Title level={2} data-test-id="odchylenie-standardowe">
+            Odchylenie standardowe
+          </Typography.Title>
         </div>
         <div className="display">
           <div className="input">
             <Text>Wybierz walutę: </Text>
             <Select
+              data-test-id="wybierz-walute"
               style={{ width: 200 }}
               onChange={selectCurrency}
               options={[
@@ -166,6 +173,7 @@ const StandardDeviationPage = () => {
           <div className="input">
             <Text>Wybierz daty: </Text>
             <RangePicker
+              data-test-id="wybierz-daty"
               onChange={selectDates}
               format={"DD/MM/YYYY"}
               disabled={show}
@@ -178,7 +186,8 @@ const StandardDeviationPage = () => {
               onClick={() => {
                 handleClickSd();
               }}
-              disabled={show || currency.length !== 3 || dates.length !== 2}>
+              disabled={show || currency.length !== 3 || dates.length !== 2}
+              data-test-id="przycisk-odchylenie-standardowe">
               Oblicz
             </Button>
           </div>

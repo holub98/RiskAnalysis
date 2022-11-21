@@ -49,7 +49,7 @@ exports.createCurrency = async (req, res) => {
             }
           }
           currencyModel
-            .find({ currency: "USD" })
+            .find({ currency: currency })
             .sort("-date")
             .then(async (result) => {
               let closeValue = result.map((a) => a.close);
