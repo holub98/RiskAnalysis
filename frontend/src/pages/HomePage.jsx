@@ -99,9 +99,8 @@ const HomePage = () => {
   }
   return (
     <Layout className="layout">
-      <Card className="card">
+      <Card className="card" data-test-id="wykres-walut">
         <Plot
-          data-test-id="wykres-walut"
           data={[
             {
               x: dateEuroArr,

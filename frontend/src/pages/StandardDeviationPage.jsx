@@ -6,6 +6,7 @@ import moment from "moment";
 import "../styles/PageStyle.css";
 const { RangePicker } = DatePicker;
 const { Text } = Typography;
+const { Option } = Select;
 const StandardDeviationPage = () => {
   const [show, setShow] = useState(false);
   const [sd, setSd] = useState([]);
@@ -133,7 +134,9 @@ const StandardDeviationPage = () => {
     <Layout className="layout">
       <Card className="card">
         <div className="display">
-          <Typography.Title level={2} data-test-id="odchylenie-standardowe">
+          <Typography.Title
+            level={2}
+            data-test-id="strona-odchylenie-standardowe">
             Odchylenie standardowe
           </Typography.Title>
         </div>
@@ -144,31 +147,24 @@ const StandardDeviationPage = () => {
               data-test-id="wybierz-walute"
               style={{ width: 200 }}
               onChange={selectCurrency}
-              options={[
-                {
-                  value: "EUR",
-                  label: "Euro",
-                },
-                {
-                  value: "GBP",
-                  label: "Funt szterling",
-                },
-                {
-                  value: "CHF",
-                  label: "Frank szwajcarski",
-                },
-                {
-                  value: "USD",
-                  label: "Dolar amerykaski",
-                },
-                {
-                  value: "JPY",
-                  label: "Jen japoński",
-                },
-              ]}
               disabled={show}
-              value={currency !== "" ? currency : "Wybierz walutę"}
-            />
+              value={currency !== "" ? currency : "Wybierz walutę"}>
+              <Option value="EUR" data-test-id="euro-wybierz">
+                Euro
+              </Option>
+              <Option value="GBP" data-test-id="funt-wybierz">
+                Funt szterling{" "}
+              </Option>
+              <Option value="CHF" data-test-id="frank-wybierz">
+                Frank szwajcarski
+              </Option>
+              <Option value="USD" data-test-id="dolar-wybierz">
+                Dolar amerykaski{" "}
+              </Option>
+              <Option value="JPY" data-test-id="jen-wybierz">
+                Jen japoński
+              </Option>
+            </Select>
           </div>
           <div className="input">
             <Text>Wybierz daty: </Text>

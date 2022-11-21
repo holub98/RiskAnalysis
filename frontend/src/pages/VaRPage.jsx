@@ -13,6 +13,7 @@ import "antd/dist/antd.css";
 import moment from "moment";
 const { Text } = Typography;
 const { RangePicker } = DatePicker;
+const { Option } = Select;
 const VaRPage = () => {
   const [show, setShow] = useState(false);
   const [vars, setVaRs] = useState([]);
@@ -158,7 +159,7 @@ const VaRPage = () => {
     <Layout className="layout">
       <Card className="card">
         <div className="display">
-          <Typography.Title level={2} data-test-id="var">
+          <Typography.Title level={2} data-test-id="strona-var">
             Wartość zagrożona
           </Typography.Title>
         </div>
@@ -169,31 +170,24 @@ const VaRPage = () => {
               data-test-id="wybierz-walute"
               style={{ width: 200 }}
               onChange={selectCurrency}
-              options={[
-                {
-                  value: "EUR",
-                  label: "Euro",
-                },
-                {
-                  value: "GBP",
-                  label: "Funt szterling",
-                },
-                {
-                  value: "CHF",
-                  label: "Frank szwajcarski",
-                },
-                {
-                  value: "USD",
-                  label: "Dolar amerykaski",
-                },
-                {
-                  value: "JPY",
-                  label: "Jen japoński",
-                },
-              ]}
               disabled={show}
-              value={currency !== "" ? currency : "Wybierz walutę"}
-            />
+              value={currency !== "" ? currency : "Wybierz walutę"}>
+              <Option value="EUR" data-test-id="euro-wybierz">
+                Euro
+              </Option>
+              <Option value="GBP" data-test-id="funt-wybierz">
+                Funt szterling{" "}
+              </Option>
+              <Option value="CHF" data-test-id="frank-wybierz">
+                Frank szwajcarski
+              </Option>
+              <Option value="USD" data-test-id="dolar-wybierz">
+                Dolar amerykaski{" "}
+              </Option>
+              <Option value="JPY" data-test-id="jen-wybierz">
+                Jen japoński
+              </Option>
+            </Select>
           </div>
           <div className="input">
             <Text>Wybierz daty: </Text>
@@ -220,26 +214,22 @@ const VaRPage = () => {
           <div className="input">
             <Text>Wybierz poziom ufności: </Text>
             <Select
-              data-test-id="wybierz-poziom ufnosci"
+              data-test-id="wybierz-poziom-ufnosci"
               style={{ width: 200 }}
               onChange={selectConfidenceLevel}
-              options={[
-                {
-                  value: 0.01,
-                  label: "α = 0,01",
-                },
-                {
-                  value: 0.05,
-                  label: "α = 0,05",
-                },
-              ]}
               disabled={show}
               value={
                 confidenceLevel !== ""
                   ? confidenceLevel
                   : "Wybierz poziom ufności"
-              }
-            />
+              }>
+              <Option value={0.01} data-test-id="0,01-wybierz">
+                α = 0,01
+              </Option>
+              <Option value={0.05} data-test-id="0,05-wybierz">
+                α = 0,05
+              </Option>
+            </Select>
           </div>
           <div className="input">
             <Button
