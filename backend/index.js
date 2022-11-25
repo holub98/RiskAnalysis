@@ -30,7 +30,8 @@ app.use("/api/var", VaR);
 app.use("/api/standard-deviation", SD);
 app.use("/api/currency", currency);
 
-app.listen(PORT, function () {
+let server = app.listen(PORT, function () {
   connect();
   console.log(`Server is running on port ${PORT}`);
 });
+module.exports = server;

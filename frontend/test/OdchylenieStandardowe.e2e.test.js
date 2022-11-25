@@ -65,8 +65,10 @@ test("odchyelenie standardowe - brak daty poczatkowej", async ({ page }) => {
   await page.locator("data-test-id=wybierz-walute").click();
   await page.locator("data-test-id=euro-wybierz").click();
   await page.locator("data-test-id=wybierz-daty").click();
+  await page.locator('[placeholder="End date"]').click();
   await page.fill('[placeholder="End date"]', "09/09/2021");
   await page.locator('[title="2021-09-09"]').click();
+  await page.locator("data-test-id=strona-odchylenie-standardowe").click();
   await page
     .locator("data-test-id=przycisk-odchylenie-standardowe")
     .isDisabled();
